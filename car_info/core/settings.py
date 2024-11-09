@@ -6,7 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', "test")
 
-DEBUG = True if os.getenv('DEBUG', False) == "True" else False
+DEBUG = True
+# DEBUG = True if os.getenv('DEBUG', False) == "True" else False
 
 ALLOWED_HOSTS = ['*']
 

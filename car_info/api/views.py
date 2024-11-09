@@ -22,7 +22,6 @@ class CarViewSet(viewsets.ModelViewSet):
 
         car = self.get_object()
         if request.method == 'POST':
-            self.permission_classes = (permissions.IsAuthenticated,)
 
             serializer = serializers.CommentSerializer(
                 data=request.data, context={'request': request, 'pk': pk})
@@ -37,3 +36,12 @@ class CarViewSet(viewsets.ModelViewSet):
             comments = car.comments.all()
             serializer = serializers.CommentSerializer(comments, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get_permissions(self):
+        """Назначаем права доступа в зависимости от метода."""
+
+        if self.action == 'comment_car' and self.request.method == 'POST':
+            return [permissions.IsAuthenticated(), ]
+        elif self.action == 'comment_car' and self.request.method == 'GET':
+            return [permissions.AllowAny(), ]
+        return [OwnerOrReadOnly(),]
