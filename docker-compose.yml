@@ -6,27 +6,35 @@ volumes:
 
 services:
 
+  db:
+    image: postgres:13
+    env_file: .env.example
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
   backend:
     build: ./car_info/
     env_file: .env.example
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
     volumes:
       - static:/backend_static
     command: > 
       sh -c "python manage.py migrate &&
         python manage.py collectstatic --noinput
-        cp -r /app/backend_static/. /backend_static/static/
-        gunicorn --bind 0.0.0.0:8000 core.wsgi
-        python manage.py runserver 0.0.0.0:8000"
-  
-  db:
-    image: postgres:13
-    env_file: .env.example
-    depends_on:
-      - backend
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
+        cp -r /app/backend_static/. /backend_static/
+        cp -r /app/templates/. /backend_static/templates/
+        gunicorn --bind 0.0.0.0:8000 core.wsgi"
 
   nginx:
     depends_on:

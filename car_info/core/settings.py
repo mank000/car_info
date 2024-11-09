@@ -21,7 +21,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework_simplejwt',
     'djoser',
-    'cars.apps.CarsConfig'
+    'cars.apps.CarsConfig',
+    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE = [
@@ -125,5 +126,5 @@ SWAGGER_SETTINGS = {
     }
 }
 
-STATIC_ROOT = '/backend_static/'
 STATIC_URL = '/backend_static/'
+STATIC_ROOT = BASE_DIR / 'backend_static'
