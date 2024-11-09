@@ -12,9 +12,9 @@ git clone
 ```
 sudo docker compose up
 ```
-3. Переходим на 
+3. Документация по всем эндпоинтам:
 ```
-http://localhost:8000/
+http://localhost:8000/swagger/
 ```
 
 ## Алгоритм авторизации: 
