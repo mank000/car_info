@@ -1,0 +1,39 @@
+version: '3.3'
+
+volumes:
+  pg_data:
+  static:
+
+services:
+
+  backend:
+    build: ./car_info/
+    env_file: .env.example
+    volumes:
+      - static:/backend_static
+    command: > 
+      sh -c "python manage.py migrate &&
+        python manage.py collectstatic --noinput
+        cp -r /app/backend_static/. /backend_static/static/
+        gunicorn --bind 0.0.0.0:8000 core.wsgi
+        python manage.py runserver 0.0.0.0:8000"
+  
+  db:
+    image: postgres:13
+    env_file: .env.example
+    depends_on:
+      - backend
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  nginx:
+    depends_on:
+      - backend
+    build: ./nginx/
+    env_file: .env.example
+    volumes:
+      - static:/backend_static
+    ports:
+      - 8000:80

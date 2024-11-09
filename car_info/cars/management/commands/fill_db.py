@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Импорт данных из CSV файлов в базу данных'
 
     def handle(self, *args, **kwargs):
-        base_dir = os.path.join(settings.STATICFILES_DIRS[0], 'data')
+        base_dir = os.path.join('/app/data')
 
         self.import_users(os.path.join(base_dir, 'users.csv'))
 

@@ -1,11 +1,12 @@
+import os
 from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-pbrak@5#_wik50g!nkj)!a9ge6oj0%@-76y=!myp!0@ed^mt#-'
+SECRET_KEY = os.getenv('SECRET_KEY', "test")
 
-DEBUG = True
+DEBUG = True if os.getenv('DEBUG', False) == "True" else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -55,11 +56,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'django'),
+        'USER': os.getenv('POSTGRES_USER', 'django'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -121,11 +125,5 @@ SWAGGER_SETTINGS = {
     }
 }
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'backend_static',
-]
-
 STATIC_ROOT = '/backend_static/'
 STATIC_URL = '/backend_static/'
-
-STATICFILES_DIRS = ((BASE_DIR / ''), )
