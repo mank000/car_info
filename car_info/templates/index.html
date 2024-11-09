@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Автомобили</h1>
+<div id="auth">
+{% if user.is_authenticated %}
+  
+    <p>С возвращением, {{ user.username }}!</p>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit">logout</button>
+    <a href="{% url 'cars:create' %}">Новый автомобиль</a>
+  </form>
+  {% else %}
+  <p>Вы не вошли:</p>
+    <a href="{% url 'login' %}">Войти</a>
+    <a href="{% url 'signup' %}">Регистрация</a>
+  {% endif %}
+</div>
+
+<ul>
+{% for car in cars %}
+    <li><a href="{% url 'cars:detail' car.id %}">{{ car.make }} {{ car.model }}<a></li>
+{% empty %}
+    Машин нет.
+{% endfor %}
+</ul>
+{% endblock content %}

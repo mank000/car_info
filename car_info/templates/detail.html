@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ car.make }} {{ car.model }}
+{% endblock %}
+
+{% block content %}
+    <a href="{% url 'cars:index' %}">Домой</a>
+    <h1>{{ car.make }} {{car.model}}</h1>
+    <p> Год: {{car.year}} </br>
+    Описание: {{car.description}}</br>
+    Обновлено: {{car.updated_at}}</br>
+    Добавлено: {{car.created_at}}</br>
+    Владелец: {{car.owner.username}}</br>
+    </p>
+    {% if user.id == car.owner.id%}
+    <a href="{% url 'cars:edit' car.id %}">Отредактировать</a>
+    <form action="{% url 'cars:delete' car.id %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      <input type="hidden" name="delete" value="true">
+      <button type="submit">Удалить</button>
+    </form>
+    {% endif %}
+  </br>
+    {% if user.is_authenticated%}
+    <a href="{% url 'cars:comment' car.id %}">Добавить комментарий</a>
+    {% endif %}
+    {% for comment in comments %}
+    <h3>{{ comment.author.username }}</h3>
+    <p>{{ comment.content}}</p>
+    <h5>{{ comment.created_at}}</h5>
+    {% empty %}
+    <p>Комментариев нет...</p>
+    {% endfor %}
+
+
+{% endblock %}

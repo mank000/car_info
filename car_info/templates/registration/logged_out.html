@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+Вы вышли из системы!
+<p><a href="{% url 'login' %}">Войти снова</a></p>
+<p><a href="{% url 'cars:index' %}">На главную</a></p>
+{% endblock %}

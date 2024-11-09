@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+  {% if '/edit/' in request.path %}
+    Редактирование публикации
+  {% elif "/delete/" in request.path %}
+    Удаление публикации
+  {% else %}
+    Добавление публикации
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% with data=form.instance %}
+    {% if "/edit/" in request.path %}
+      <h1>Редактировать запись {{ data.pk }}</h1>
+    {% elif "/delete/" in request.path %}
+      <h1>Удалить запись {{ data.pk }}</h1>
+    {% else %}
+      <h1>Создать запись</h1>
+    {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {% if not "/delete/" in request.path %}
+          {{ form }}
+        {% else %}
+          <p>{{ data.make }} {{ data.model }}</p>
+          <p>{{ data.birthday }}</p>
+        {% endif %}
+        <button type="submit">Отправить</button>
+      </form>
+          
+      {% endwith %}
+{% endblock %}

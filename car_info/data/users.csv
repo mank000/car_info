@@ -1,0 +1,4 @@
+newUser,John,Doe,user@example.com,password123,0,1
+jane_doe,Jane,Doe,jane.doe@example.com,password456,0,1
+adminUser,Admin,User,admin@example.com,adminpassword,1,1
+guestUser,, ,guest@example.com,guestpassword,0,1
